@@ -1,55 +1,63 @@
 # ShopLite — E-Commerce Web Application
 
-A full-stack online store built for the e-commerce task requirements: product catalog, cart and checkout, customer/admin access, product management, order management, and database-backed data.
+ShopLite is a small full-stack online store built to cover the e-commerce task requirements.
 
 ## Features
 
-- Product catalog with category navigation, search, sorting, details, prices and stock availability
-- Shopping cart with quantity controls, removal, and totals
-- Checkout with shipping details and database-backed order creation
-- Customer registration/login and role-based authorization
-- Admin product CRUD and stock management
+- Product catalog with category filters and search
+- Shopping cart with quantity controls and totals
+- Checkout with shipping details and persistent order creation
+- Customer registration/login and JWT authentication
+- Role-based admin access
+- Admin product management and stock updates
 - Customer order history
-- Admin order list and order-status updates
-- Responsive storefront and dashboard layouts
-- SQLite for zero-setup local use; optional PostgreSQL support via `DATABASE_URL`
-- API tests for core authentication, inventory and order workflows
+- Admin order list and status updates
+- Responsive UI
+- SQLite for quick local setup; optional PostgreSQL with `DATABASE_URL`
 
-Payment processing is intentionally not included because it is not required by the assignment. Checkout creates an order record; it does not charge a payment method.
+Payment processing is intentionally omitted because the task does not require a payment gateway. Checkout creates a database order without charging a payment method.
 
 ## Stack
 
-- Frontend: React + Vite
-- Backend: Python + Flask REST API
-- Database: SQLite by default; optional PostgreSQL
-- Authentication: JWT
-- Password hashing: Werkzeug
+- React + Vite
+- Python + Flask REST API
+- SQLite local database, with optional PostgreSQL support
+- JWT sessions
+- Werkzeug password hashing
 
 ## Run locally on Windows
 
 1. Install Python 3.11+ and Node.js 20+.
-2. Extract the source ZIP from this repository.
+2. Open this folder in VS Code.
 3. Run `setup.bat`.
-4. Run `run_backend.bat` in one terminal.
-5. Run `run_frontend.bat` in another terminal.
+4. In one terminal run `run_backend.bat`.
+5. In a second terminal run `run_frontend.bat`.
 6. Open `http://localhost:5173`.
 
-No Docker installation is needed for the default SQLite setup.
+No Docker or local PostgreSQL installation is required for the default SQLite mode.
 
-## PostgreSQL option
+## Admin account
 
-The project includes `requirements-postgres.txt` for the optional PostgreSQL driver. Configure `DATABASE_URL` in a local `.env` file for a dedicated ShopLite database. Do not use credentials from other projects.
+Set `ADMIN_EMAIL` and `ADMIN_PASSWORD` in your local `.env` file before the first backend start. The app creates the admin account if these values are configured. The values in `.env.example` are examples only; change the password before use.
 
-## Source archive
+## PostgreSQL mode
 
-Download `ShopLite-Source.zip` from the repository files to get the complete runnable source package, including the backend, frontend, tests, and Windows setup scripts.
+To use PostgreSQL instead of SQLite, set `DATABASE_URL` to a dedicated PostgreSQL database URL and install requirements using `pip install -r requirements.txt`. Keep database credentials out of Git.
 
-## Verify the project
+## Main API routes
 
-- Read `SUBMISSION_CHECKLIST.md` for the requirement mapping and demo flow.
-- Read `CHANGELOG.md` for the release notes.
-- Test product browsing, cart changes, checkout, order history, and admin product/order management.
+- `GET /api/products`
+- `POST /api/auth/register`
+- `POST /api/auth/login`
+- `GET /api/auth/me`
+- `POST /api/orders`
+- `GET /api/orders`
+- `GET /api/admin/products`
+- `POST /api/admin/products`
+- `PATCH /api/admin/products/<id>`
+- `DELETE /api/admin/products/<id>`
+- `GET /api/admin/orders`
+- `PATCH /api/admin/orders/<id>`
+- `GET /api/health`
 
-## Author
-
-Shashwat Solanki
+See `SUBMISSION_CHECKLIST.md` for a practical demo flow.
