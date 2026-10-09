@@ -204,13 +204,13 @@ def register():
     password = str(payload.get("password", ""))
     if len(name) < 2 or len(name) > 100 or "@" not in email or len(password) < 8:
         return jsonify({"error": "Enter a name, valid email, and password with at least 8 characters."}), 400
-    if IS_POSTGRES:
-        cursor = execute("INSERT INTO users (name, email, password_hash, role, created_at) VALUES (?, ?, ?, 'customer', ?) RETURNING id", (name, email, generate_password_hash(password), now_text()))
-        user_id = cursor.fetchone()["id"]
-    else:
-        cursor = execute("INSERT INTO users (name, email, password_hash, role, created_at) VALUES (?, ?, ?, 'customer', ?)", (name, email, generate_password_hash(password), now_text()))
-        user_id = cursor.lastrowid
     try:
+        if IS_POSTGRES:
+            cursor = execute("INSERT INTO users (name, email, password_hash, role, created_at) VALUES (?, ?, ?, 'customer', ?) RETURNING id", (name, email, generate_password_hash(password), now_text()))
+            user_id = cursor.fetchone()["id"]
+        else:
+            cursor = execute("INSERT INTO users (name, email, password_hash, role, created_at) VALUES (?, ?, ?, 'customer', ?)", (name, email, generate_password_hash(password), now_text()))
+            user_id = cursor.lastrowid
         db().commit()
     except Exception:
         db().rollback()
